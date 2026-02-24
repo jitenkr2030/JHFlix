@@ -14,19 +14,211 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String    @id @default(cuid())
+  email           String?   @unique
+  phone           String?   @unique
+  name            String?
+  avatar          String?
+  role            UserRole  @default(USER)
+  isVerified      Boolean   @default(false)
+  subscriptionId  String?
+  subscriptionEnd DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  // Relations
+  profiles        UserProfile[]
+  watchlist       WatchlistItem[]
+  watchHistory    WatchHistory[]
+  subscriptions   Subscription[]
+  uploadedContent Video[]   @relation("CreatorVideos")
+  reviews         Review[]
+  
+  @@map("users")
 }
 
-model Post {
+model UserProfile {
+  id          String    @id @default(cuid())
+  userId      String
+  name        String
+  avatar      String?
+  isKids      Boolean   @default(false)
+  preferences Json?     // Store user preferences like language, etc.
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("user_profiles")
+}
+
+model Video {
+  id            String      @id @default(cuid())
+  title         String
+  description   String?
+  thumbnail     String
+  videoUrl      String
+  duration      Int         // in seconds
+  category      Category
+  language      Language
+  releaseYear   Int
+  ageRating     AgeRating   @default(U)
+  isPremium     Boolean     @default(false)
+  isPublic      Boolean     @default(true)
+  viewCount     Int         @default(0)
+  likeCount     Int         @default(0)
+  downloadUrl   String?
+  subtitleUrl   String?
+  tags          String?     // JSON array of tags
+  createdBy     String
+  approvedAt    DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  
+  // Relations
+  creator       User        @relation("CreatorVideos", fields: [createdBy], references: [id])
+  watchlist     WatchlistItem[]
+  watchHistory  WatchHistory[]
+  reviews       Review[]
+  adBreaks      AdBreak[]
+  
+  @@map("videos")
+}
+
+model WatchlistItem {
   id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
+  userId    String
+  videoId   String
+  addedAt   DateTime @default(now())
+  
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, videoId])
+  @@map("watchlist_items")
+}
+
+model WatchHistory {
+  id          String   @id @default(cuid())
+  userId      String
+  videoId     String
+  watchedAt   DateTime @default(now())
+  watchTime   Int      @default(0) // seconds watched
+  completed   Boolean  @default(false)
+  
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  
+  @@map("watch_history")
+}
+
+model Subscription {
+  id           String           @id @default(cuid())
+  userId       String
+  plan         SubscriptionPlan
+  price        Float
+  currency     String           @default("INR")
+  startDate    DateTime
+  endDate      DateTime
+  isActive     Boolean          @default(true)
+  paymentId    String?          // Payment gateway reference
+  createdAt    DateTime         @default(now())
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("subscriptions")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  videoId   String
+  rating    Int      // 1-5 stars
+  comment   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, videoId])
+  @@map("reviews")
+}
+
+model AdBreak {
+  id        String   @id @default(cuid())
+  videoId   String
+  position  Int      // timestamp in seconds
+  duration  Int      // ad duration in seconds
+  adUrl     String
+  isSkippable Boolean @default(true)
+  createdAt DateTime @default(now())
+  
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  
+  @@map("ad_breaks")
+}
+
+model CreatorApplication {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  fullName    String
+  email       String
+  phone       String
+  address     String
+  idProof     String?  // URL to ID proof document
+  description String?  // About the creator
+  status      ApplicationStatus @default(PENDING)
+  submittedAt DateTime @default(now())
+  reviewedAt  DateTime?
+  reviewedBy  String?
+  
+  @@map("creator_applications")
+}
+
+// Enums
+enum UserRole {
+  USER
+  CREATOR
+  ADMIN
+  MODERATOR
+}
+
+enum Category {
+  MOVIE
+  WEB_SERIES
+  MUSIC
+  CULTURE
+  DOCUMENTARY
+  LIVE_STREAMING
+  EVENTS
+}
+
+enum Language {
+  HINDI
+  ENGLISH
+  NAGPURI
+  SANTALI
+  KHORTHA
+  OTHER
+}
+
+enum AgeRating {
+  U
+  U_A
+  A
+  S
+}
+
+enum SubscriptionPlan {
+  FREE
+  MONTHLY
+  YEARLY
+  LIFETIME
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
