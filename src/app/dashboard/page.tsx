@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge'
 import { ProfileManager } from '@/components/profile/profile-manager'
 import { WatchlistManager } from '@/components/watchlist/watchlist-manager'
 import { SubscriptionManager } from '@/components/subscription/subscription-manager'
+import { AnalyticsDashboard } from '@/components/analytics/analytics-dashboard'
 
 // Mock user data - in production, get from auth context
 const mockUser = {
@@ -201,6 +202,10 @@ export default function DashboardPage() {
                 <DollarSign className="w-4 h-4 mr-2" />
                 Subscription
               </TabsTrigger>
+              <TabsTrigger value="analytics" className="data-[state=active]:bg-red-600">
+                <BarChart3 className="w-4 h-4 mr-2" />
+                My Analytics
+              </TabsTrigger>
               <TabsTrigger value="activity" className="data-[state=active]:bg-red-600">
                 <Clock className="w-4 h-4 mr-2" />
                 Recent Activity
@@ -231,6 +236,10 @@ export default function DashboardPage() {
 
             <TabsContent value="subscription">
               <SubscriptionManager userId={mockUser.id} />
+            </TabsContent>
+
+            <TabsContent value="analytics">
+              <AnalyticsDashboard userId={mockUser.id} userRole="USER" />
             </TabsContent>
 
             <TabsContent value="activity">

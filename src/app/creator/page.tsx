@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
+import { AnalyticsDashboard } from '@/components/analytics/analytics-dashboard'
 import { UploadModal } from '@/components/upload/upload-modal'
 
 // Mock creator data
@@ -414,41 +415,7 @@ export default function CreatorDashboard() {
             </TabsContent>
 
             <TabsContent value="analytics">
-              <div className="grid md:grid-cols-2 gap-6">
-                <Card className="bg-gray-900 border-gray-800">
-                  <CardHeader>
-                    <CardTitle>Views Over Time</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-64 flex items-center justify-center text-gray-400">
-                      <BarChart3 className="w-12 h-12 mr-2" />
-                      Analytics Chart (Integration needed)
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gray-900 border-gray-800">
-                  <CardHeader>
-                    <CardTitle>Top Performing Videos</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {videos.slice(0, 5).map((video, index) => (
-                        <div key={video.id} className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <span className="text-lg font-bold text-gray-500">#{index + 1}</span>
-                            <div>
-                              <p className="font-medium text-sm line-clamp-1">{video.title}</p>
-                              <p className="text-xs text-gray-400">{formatNumber(video.views)} views</p>
-                            </div>
-                          </div>
-                          <TrendingUp className="w-4 h-4 text-green-500" />
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+              <AnalyticsDashboard userId={mockCreator.id} userRole="CREATOR" />
             </TabsContent>
 
             <TabsContent value="earnings">

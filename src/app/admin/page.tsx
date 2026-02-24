@@ -11,6 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Switch } from '@/components/ui/switch'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { AnalyticsDashboard } from '@/components/analytics/analytics-dashboard'
 
 // Mock admin data
 const mockAdminStats = {
@@ -489,55 +490,7 @@ export default function AdminDashboard() {
             </TabsContent>
 
             <TabsContent value="overview">
-              <div className="grid md:grid-cols-2 gap-6">
-                <Card className="bg-gray-900 border-gray-800">
-                  <CardHeader>
-                    <CardTitle>Quick Actions</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <Button className="w-full justify-start bg-red-600 hover:bg-red-700">
-                      <Clock className="w-4 h-4 mr-2" />
-                      Review Pending Approvals ({mockAdminStats.pendingApprovals})
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start">
-                      <Users className="w-4 h-4 mr-2" />
-                      Manage Users
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start">
-                      <DollarSign className="w-4 h-4 mr-2" />
-                      View Revenue Report
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start">
-                      <Settings className="w-4 h-4 mr-2" />
-                      Platform Settings
-                    </Button>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gray-900 border-gray-800">
-                  <CardHeader>
-                    <CardTitle>System Health</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span>Server Status</span>
-                      <Badge className="bg-green-600">Online</Badge>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Database</span>
-                      <Badge className="bg-green-600">Healthy</Badge>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>CDN Status</span>
-                      <Badge className="bg-green-600">Active</Badge>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Storage Used</span>
-                      <span className="text-sm text-gray-400">45.2 GB / 100 GB</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+              <AnalyticsDashboard userRole="ADMIN" />
             </TabsContent>
           </Tabs>
         </div>
