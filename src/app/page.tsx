@@ -117,6 +117,12 @@ export default function Home() {
                 <button className="hover:text-red-500 transition-colors">Web Series</button>
                 <button className="hover:text-red-500 transition-colors">Music</button>
                 <button className="hover:text-red-500 transition-colors">Culture</button>
+                <button 
+                  onClick={() => window.location.href = '/dashboard'}
+                  className="hover:text-red-500 transition-colors"
+                >
+                  Dashboard
+                </button>
               </nav>
             </div>
 
@@ -165,6 +171,12 @@ export default function Home() {
                     <button className="hover:text-red-500 transition-colors text-left">Web Series</button>
                     <button className="hover:text-red-500 transition-colors text-left">Music</button>
                     <button className="hover:text-red-500 transition-colors text-left">Culture</button>
+                    <button 
+                      onClick={() => window.location.href = '/dashboard'}
+                      className="hover:text-red-500 transition-colors text-left"
+                    >
+                      Dashboard
+                    </button>
                     <div className="pt-4 border-t border-gray-800">
                       <Button 
                         variant="ghost" 
