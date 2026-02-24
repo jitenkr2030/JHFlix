@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { ProfileManager } from '@/components/profile/profile-manager'
 import { WatchlistManager } from '@/components/watchlist/watchlist-manager'
+import { SubscriptionManager } from '@/components/subscription/subscription-manager'
 
 // Mock user data - in production, get from auth context
 const mockUser = {
@@ -196,6 +197,10 @@ export default function DashboardPage() {
                 <List className="w-4 h-4 mr-2" />
                 My Watchlist
               </TabsTrigger>
+              <TabsTrigger value="subscription" className="data-[state=active]:bg-red-600">
+                <DollarSign className="w-4 h-4 mr-2" />
+                Subscription
+              </TabsTrigger>
               <TabsTrigger value="activity" className="data-[state=active]:bg-red-600">
                 <Clock className="w-4 h-4 mr-2" />
                 Recent Activity
@@ -222,6 +227,10 @@ export default function DashboardPage() {
 
             <TabsContent value="watchlist">
               <WatchlistManager userId={mockUser.id} />
+            </TabsContent>
+
+            <TabsContent value="subscription">
+              <SubscriptionManager userId={mockUser.id} />
             </TabsContent>
 
             <TabsContent value="activity">
